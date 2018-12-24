@@ -8,7 +8,7 @@
 		html,body{
 			padding: 0;
 			margin: 0;
-			height: 300%;
+			height: 250%;
 		}
 		#main{
 			width: 100%;
@@ -52,7 +52,7 @@
 			height: 150px;
 			margin: 10px 0 10px 55px;
 			border: 1px solid blue;
-			background-repeat: no-repeat;: 
+			background-repeat: no-repeat;
 			background-position: left;
 			box-sizing: border-box;
 			background-size: 35% 100%; 
@@ -138,12 +138,15 @@
 				// console.log(typeof(input.value),input.value)
 				// var app_id = "77974";
 				// var secret1 = "3e211eb8b83e4c018f387963b826f662"
-				for(var i=0;i<songlist.children.length;i++){
-					songlist.children[i].remove();
-					i--;
-				}
-				ajax(find_url,`?showapi_appid=${appid}&showapi_sign=${secret}&keyword=${input.value}`,function(data){
-					display(data.showapi_res_body.pagebean.contentlist);
+				// for(var i=0;i<songlist.children.length;i++){
+				// 	songlist.children[i].remove();
+				// 	i--;
+				// }
+				// ajax(find_url,`?showapi_appid=${appid}&showapi_sign=${secret}&keyword=${input.value}`,function(data){
+				// 	display(data.showapi_res_body.pagebean.contentlist);
+				// });
+				ajax('https://api.bzqll.com/music/tencent/search?key=579621905&limit=100&offset=0&type=song',`&s=${input.value}`,function(data){
+					display()
 				});
 			}
 		}
@@ -158,14 +161,7 @@
 				var singername = document.createElement("p");
 					singername.textContent = song.singername;
 				var time = document.createElement("p");
-				function sec(){
-					if(song.seconds%60<10){
-						return "0"+song.seconds%60;
-					}else{
-						return song.seconds%60;
-					}
-				}
-					time.textContent = parseInt(song.seconds/60)+":"+sec();
+					time.textContent = parseInt(song.seconds/60)+":"+sec(song);
 					time.style.margin = "-10px 100px";
 					content.appendChild(songname);
 					content.appendChild(time);
@@ -176,7 +172,7 @@
 						// var appId = "78010";
 						// var secret2 = "90458e09ee4446d791aedd64d9b826bc"
 						var lyric_url = " http://route.showapi.com/213-2";
-							mp3.src = `http://ws.stream.qqmusic.qq.com/C100${songUrl.songlist[index].data.songmid}.m4a?fromtag=0&guid=126548448`;
+							mp3.src = `http://dl.stream.qqmusic.qq.com/C400${songUrl.songlist[index].data.songmid}.m4a?guid=2095717240&vkey=D3B4263A4591911F618DCCFAFFC9BA84F5BCDFCAC91CCC275A4E1E6BCE9726D6BDD0AA4BF45B660C2A83972A809E7EF4E5D976D17B7FDCB2&uin=0&fromtag=38`;
 						mp3.oncanplay = function(){
 							mp3.volume = 0.5
 							console.log("播放");
@@ -214,17 +210,15 @@
 	            type: "GET",
 	            dataType:"jsonp",
 	            jsonp:'jsonpCallback',
-	            contentType: "application/jsonp; charset=utf-8",
-		            success:function(result){
-		            	songUrl=result;
-		            },
-		            error:function(){
-						console.log('error');
-					}
+				success:function(result){
+					songUrl = result;
+				},
+				error:function(){
+					console.log('error');
+				}
 	        });
 		};
 		function ajax(url,params,callback1){
-
 			var xhr = function(){
 				if(window.XMLHttpRequest){
 					return new XMLHttpRequest();
@@ -239,15 +233,26 @@
 					callback1(xhr.response);
 					callback1Type:"jsonp";
 					songId = xhr.response;
-					console.log(xhr.getAllResponseHeaders());
+					// console.log(xhr.getAllResponseHeaders());
 				}
 			}
 			xhr.open("GET",url+params);
-			// xhr.setRequestHeader("access-control-allow-methods","GET");
-			// xhr.setRequestHeader("access-control-allow-origin","*");
-			// xhr.setRequestHeader("access-control-expose-headers"," Authorization");
-			// xhr.setRequestHeader("access-control-allow-methods","GET");
 			xhr.send();
+		}
+		//搜索歌曲
+		function searchSong(){
+			$.ajax({
+	            url:`https://api.bzqll.com/music/tencent/search?key=579621905&s=${input.value}&limit=100&offset=0&type=song`,
+				type: "GET",
+	            dataType:"jsonp",
+				jsonp:'',
+				success:function(msg){
+					console.log(msg)
+				},
+				error:function(error){
+					console.log(error);
+				}
+	        });
 		}
 		function showLyric(lyric){
 			songlist.innerHTML += lyric;
@@ -257,6 +262,14 @@
 			var g = Math.floor(Math.random()*120+120);
 			var b = Math.floor(Math.random()*120+120);
 			return `rgb(${r},${g},${b})`;
+		}
+		//歌曲时间换算
+		function sec(song){
+			if(song.seconds%60<10){
+				return "0"+song.seconds%60;
+			}else{
+				return song.seconds%60;
+			}
 		}
 	</script>
 </body>
