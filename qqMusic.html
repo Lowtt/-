@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<link rel="icon" href="title.ico" type="img/x-ico" />
+	<link rel="stylesheet" href="style.css">
+	<title>qqMusic</title>
+	<style>
+		*{
+			padding: 0;
+			margin: 0;
+		}
+		html,body{
+			height: 200%;
+		}
+	</style>
+</head>
+<body >
+	<!-- 头部欢迎 -->
+	<div id="header">
+		<h2>欢迎来到XX音乐</h2>
+		<!-- 音乐搜索 -->
+		<div class="search">
+			<p>搜索音乐:
+				<input type="text">
+				<button>搜索</button>
+			</p>
+		</div>
+	</div>
+	<div id="main">
+		<!-- 侧边栏 -->
+		<div class="sider">
+			<div class="newSong">
+					<h3>
+						<a href="javascript:;" hidefocus="true" title="新歌首发">新歌首发</a>
+					</h3>
+			</div>
+			<!-- 热门榜单 -->
+			<div class="hot">
+				<h3>
+					<a href="javascript:;" hidefocus="true" title="热门榜单">热门榜单</a>
+				</h3>
+				<!-- 热门榜单列表 -->
+				<ul class="HotList"></ul>
+			</div>
+			<!-- 最新榜单 -->
+			<div class="newList">
+				<h3>
+					<a href="javascript:;" hidefocus="true" title="最新榜单">最新榜单</a>
+				</h3>
+				<!-- 最新榜单列表 -->
+				<ul class="NewList"></ul>
+			</div>
+		</div>
+		<!-- 歌曲展示界面 -->
+		<div class="songList"><ul class="display"></ul></div>
+	</div>
+	<script src="jquery-1.10.2.min.js"></script>
+	<script src="newSong.js"></script>
+	<script type="text/javascript">
+		var ul = document.querySelectorAll("ul");
+		var HotList = ul[0];
+		var NewList = ul[1];
+		console.log(HotList,NewList);
+		// getSelection()
+		// 获得歌单
+		function getSongSheet(url,params,callback1){
+			var xhr = function(){
+				if(window.XMLHttpRequest){
+					return new XMLHttpRequest();
+				}else{
+					return new ActiveObject("Micrsoft.XMLHttp");
+				}
+			}();
+				xhr.responseType = "json";		
+				xhr.onreadystatechange = function(){
+					if(xhr.readyState===4&&xhr.status=="200"){
+						console.log(xhr.response)
+						callback1(xhr.response);
+					}
+				}
+				xhr.open("GET",url+params);
+				xhr.send();
+		}
+		//展示歌单
+		function displaySongSheet(){
+
+		}
+		
+	</script>
+</body>
+</html>

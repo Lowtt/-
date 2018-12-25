@@ -1,0 +1,70 @@
+a{
+    text-decoration: none;
+    color: black;
+}
+ul li{
+    list-style-type:none;
+}
+#header{
+    /* height: 50px; */
+    /* margin-top:10px;          */
+    font-size: 25px;
+    color: blue;
+    text-align: center;
+    font-family:'楷体';
+}
+#header h2{
+    height: 70px;
+    line-height: 70px;
+    background:lightpink;
+}
+.search{
+    height: 50px;
+    background: green;
+    /* margin-top:10px;  */
+    line-height: 50px;
+    font-size:20px;
+}
+.search input{
+    height: 25px;
+    width: 15%;
+    background: #ccc;
+}
+.search p button{
+    height: 25px;
+    width: 60px;
+    background: lightblue;
+    margin-left: -5px;
+}
+#main{
+    width: 70%;
+    margin: 50px auto;
+    border: 1px solid red;
+}
+.sider{
+    width: 15%;
+    display: inline-block;
+}
+#main .newSong,#main .hot,#main .newList{
+    border: 1px solid grey;
+    border-collapse: collapse;
+    width: 100%;
+    height: 50px;
+    text-align: center;
+    line-height: 50px;
+    overflow: hidden;
+    box-sizing: border-box;
+}
+.newSong:hover,.hot:hover,.newList:hover{
+    background: lightslategray;
+    font-size: 20px;
+    transition: .5s;
+}
+.songList{
+    float: right;
+    width: 80%;
+    /* height: 100%; */
+    border: 1px solid blue;
+}
+
+ 

@@ -135,18 +135,9 @@
 			btn.style.backgroundColor = color();
 			if(input.value!=""){
 				songlist.innerHTML = "";
-				// console.log(typeof(input.value),input.value)
-				// var app_id = "77974";
-				// var secret1 = "3e211eb8b83e4c018f387963b826f662"
-				// for(var i=0;i<songlist.children.length;i++){
-				// 	songlist.children[i].remove();
-				// 	i--;
-				// }
-				// ajax(find_url,`?showapi_appid=${appid}&showapi_sign=${secret}&keyword=${input.value}`,function(data){
-				// 	display(data.showapi_res_body.pagebean.contentlist);
-				// });
-				ajax('https://api.bzqll.com/music/tencent/search?key=579621905&limit=100&offset=0&type=song',`&s=${input.value}`,function(data){
-					display()
+				ajax('https://api.bzqll.com/music/tencent/search?key=579621905&limit=100&offset=0&type=song',`&s=${input.value}`,function(result){
+					// display(result.data)
+					console.log(result.data)
 				});
 			}
 		}
@@ -169,38 +160,13 @@
 					songlist.appendChild(content);
 					// 歌曲的播放
 					content.addEventListener("click",function(e){
-						// var appId = "78010";
-						// var secret2 = "90458e09ee4446d791aedd64d9b826bc"
 						var lyric_url = " http://route.showapi.com/213-2";
-							mp3.src = `http://dl.stream.qqmusic.qq.com/C400${songUrl.songlist[index].data.songmid}.m4a?guid=2095717240&vkey=D3B4263A4591911F618DCCFAFFC9BA84F5BCDFCAC91CCC275A4E1E6BCE9726D6BDD0AA4BF45B660C2A83972A809E7EF4E5D976D17B7FDCB2&uin=0&fromtag=38`;
+							mp3.src = `https://api.bzqll.com/music/tencent/url?key=579621905&id=${songUrl.songlist[index].data.songmid}&br=192`
 						mp3.oncanplay = function(){
 							mp3.volume = 0.5
 							console.log("播放");
 							mp3.play();
 						}
-					
-
-						// http://183.222.96.13/amobile.music.tc.qq.com/C400001u1WH93FIvrI.m4a?guid=1458970950&vkey=31B0275F1B1F63D9BD5CA2145F658BB1AB53761C54F88B1AD568690797C80D7CA06454602E1AEB68EA80BD0301218056B157758FFF9344D3&uin=0&fromtag=66
-							// for(var i=0;i<songlist.children.length;i++){
-							// 	// if(songlist.children[i]==this){
-							// 	// 	console.log(i);
-							// 	// 	continue;
-							// 	// }
-							// 	songlist.children[i].remove();
-							// 	i--;
-							// }
-						// 歌词的查找
-						// ajax(find_url,`?showapi_appid=${appid}&showapi_sign=${secret}&keyword=${this.firstChild.innerHTML}`,function(data){});
-						// var key;
-						// 	songId.showapi_res_body.pagebean.contentlist.forEach(function(song){
-						// 			if(song.songname==content.firstChild.innerHTML&&song.singername==content.lastChild.innerHTML){
-						// 				key = song.media_mid;
-						// 			}
-						// 		})
-						// ajax(lyric_url,`?showapi_appid=${appid}&showapi_sign=${secret}&musicid=${key}`,function(data){
-						// 	showLyric(data.showapi_res_body.lyric_txt);
-						// });
-
 				})
 			})		
 		}
@@ -231,7 +197,7 @@
 				if(xhr.readyState===4&&xhr.status=="200"){
 					console.log(xhr.response)
 					callback1(xhr.response);
-					callback1Type:"jsonp";
+					// callback1Type:"jsonp";
 					songId = xhr.response;
 					// console.log(xhr.getAllResponseHeaders());
 				}
