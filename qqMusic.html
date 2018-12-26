@@ -6,14 +6,14 @@
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">
 	<link rel="icon" href="title.ico" type="img/x-ico" />
 	<link rel="stylesheet" href="style.css">
-	<title>qqMusic</title>
+	<title>xxMusic</title>
 	<style>
 		*{
 			padding: 0;
 			margin: 0;
 		}
 		html,body{
-			height: 200%;
+			/* height: 200%; */
 		}
 	</style>
 </head>
@@ -25,7 +25,7 @@
 		<div class="search">
 			<p>搜索音乐:
 				<input type="text">
-				<button>搜索</button>
+				<button class="soso">搜索</button>
 			</p>
 		</div>
 	</div>
@@ -55,18 +55,49 @@
 			</div>
 		</div>
 		<!-- 歌曲展示界面 -->
-		<div class="songList"><ul class="display"></ul></div>
+		<div class="songList">
+			<p class="head">
+				<span>新歌首发</span>
+				<span class="upDateTime"></span>
+				<span class="random"><input type="checkbox" id="ok">随机播放</span>
+			</p>
+			<ul class="display"></ul>
+		</div>
 	</div>
 	<script src="jquery-1.10.2.min.js"></script>
+	<script src="vue.min.js"></script>
 	<script src="newSong.js"></script>
+	<script src="playSong.js"></script>
 	<script type="text/javascript">
+		window.onload = function(){
+			getNewSong();
+		}
+		var ok = document.getElementById("ok");
+		ok.onclick = function(){
+			console.log(this.checked)
+		}
+		var btn = document.querySelector(".soso");
+		var input = btn.previousSibling.previousSibling;
+		// console.log(btn.previousSibling.previousSibling)
+		btn.onclick = function(){
+			if(input.value){
+				soso(input.value);
+			}else{
+				input.value = prompt("请输入搜索内容");
+			}
+		}
 		var ul = document.querySelectorAll("ul");
-		var HotList = ul[0];
-		var NewList = ul[1];
-		console.log(HotList,NewList);
+		var HotList = ul[0];//热门榜单
+		var NewList = ul[1];//最新榜单
+		var newSong = document.querySelector(".newSong");
+		newSong.onclick = function(){
+			head.children[0].innerHTML = this.children[0].children[0].innerHTML;
+			display.textContent = "";
+			getNewSong();
+		}
 		// getSelection()
-		// 获得歌单
-		function getSongSheet(url,params,callback1){
+		// 获得歌曲详情
+		function getSongDetail(url,params,callback1){
 			var xhr = function(){
 				if(window.XMLHttpRequest){
 					return new XMLHttpRequest();
@@ -84,11 +115,62 @@
 				xhr.open("GET",url+params);
 				xhr.send();
 		}
-		//展示歌单
-		function displaySongSheet(){
+		//展示搜索歌曲
+		function displaySosoSong(data){
+			for(let i=0;i<display.children.length;i++){
+				display.children[i].remove();
+				i--;
+			}
+			upDateTime.textContent = "";
+			tiTle.innerHTML = input.value;
+			data.data.forEach(function(song,index){
+				var a = document.createElement("a");
+					a.href = "javascript:;";
+					a.title = "点击播放"
+				var content = document.createElement("li");
+					content.style.backgroundColor = bgColor();
+					content.name = song.url;
+					a.textContent = index+1; 
+					// content.name = song.data.songmid;
+				var songname = document.createElement("h3");
+					songname.textContent =song.name;
+				var singername = document.createElement("span");
+					singername.textContent = song.singer;
+					a.appendChild(songname);
+					a.appendChild(singername);
+					content.appendChild(a);
+					display.appendChild(content);
+					content.addEventListener("click",function(){
+					{
+						let hasAudio = document.querySelectorAll("audio");
+						if(hasAudio){
+							hasAudio.forEach(function(x){
+								x.remove();
+							})
+						}
+					}
+					let audio = document.createElement("audio");
+						this.appendChild(audio);
+						audio.src =  this.name;
+						audio.oncanplay = function(){
+							console.log("b");
+							audio.play();
+							console.log(audio.duration,audio.currentTime)
+							// setTimeout(function(){
 
+							// },audio.duration)
+						}
+        		})
+				});
+				
 		}
-		
+		//搜索歌曲
+		function soso(key){
+			let url = "https://api.bzqll.com/music/tencent/search?key=579621905&limit=100&offset=0&type=song&s=";
+			getSongDetail(url,key,function(data){
+				displaySosoSong(data);
+			})
+		}
 	</script>
 </body>
 </html>
