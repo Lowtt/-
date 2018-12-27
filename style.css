@@ -1,3 +1,8 @@
+/* body{
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+} */
 a{
     text-decoration: none;
     color: black;
@@ -9,6 +14,9 @@ ul li{
     list-style-type:none;
 }
 #header{
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
     font-size: 25px;
     color: blue;
     text-align: center;
@@ -43,8 +51,11 @@ ul li{
 .sider{
     width: 15%;
     display: inline-block;
+    /* text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap; */
 }
-#main .newSong,#main .hot,#main .newList{
+#main .sider .newSong,#main .sider .hot,#main .sider .newList{
     border: 1px solid grey;
     border-collapse: collapse;
     width: 100%;
@@ -54,6 +65,12 @@ ul li{
     overflow: hidden;
     box-sizing: border-box;
 }
+.HotList,.NewList{
+    display: none;
+}
+.HotList li a:hover,.NewList li a:hover{
+    background: lightblue;
+}
 .newSong a:hover,.hot a:hover,.newList a:hover{
     background: lightslategray;
     color: lightsalmon;
@@ -61,6 +78,9 @@ ul li{
     transition: .5s;
 }
 .songList{
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
     float: right;
     width: 80%;
     border: 1px solid blue;
@@ -83,11 +103,14 @@ ul li{
     font-size: 16px;
 }
 .songList .display li{
-    height: 40px;
+    height: 50px;
     border-bottom: 1px dashed #ccc;
-    line-height: 40px;
+    line-height: 50px;
     text-indent: 10px;
     font-size: 20px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
 }
 .songList .display li a{
     color: red;
@@ -106,8 +129,10 @@ ul li{
     display: inline-block;
 }
 .songList .display span{
+    width: 100px;
     margin-left: 200px;
     color: black;
+    
 }
 
  

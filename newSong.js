@@ -23,44 +23,7 @@ function getNewSong(){
 function displayNew(result){
     upDateTime.textContent = result.update_time+"更新";
     result.songlist.forEach(function(song,index){
-        var a = document.createElement("a");
-            a.href = "javascript:;";
-            a.title = "点击播放"
-        var content = document.createElement("li");
-            content.style.backgroundColor = bgColor();
-            a.textContent = index+1; 
-            content.name = song.data.songmid;
-        var songname = document.createElement("h3");
-            songname.textContent =song.data.songname;
-        var singername = document.createElement("span");
-            singername.textContent = song.data.singer[0].name;
-            a.appendChild(songname);
-            a.appendChild(singername);
-            content.appendChild(a);
-            display.appendChild(content);
-            // 歌曲的播放
-            content.addEventListener("click",function(){
-                console.log(this.name)
-                {
-                    let hasAudio = document.querySelectorAll("audio");
-                    if(hasAudio){
-                        hasAudio.forEach(function(x){
-                            x.remove();
-                        })
-                    }
-                }
-                let audio = document.createElement("audio");
-                    this.appendChild(audio);
-                    audio.src =  `https://api.bzqll.com/music/tencent/url?key=579621905&id=${this.name}&br=192`;
-                    audio.oncanplay = function(){
-                        console.log("b");
-                        audio.play();
-                        console.log(audio.duration,audio.currentTime)
-                        // setTimeout(function(){
-
-                        // },audio.duration)
-                    }
-        })
+        createSongList(song.data.songmid,song.data.songname,song.data.singer[0].name,index);
     })
 }
 //背景颜色
@@ -69,4 +32,11 @@ function bgColor(){
     let g = Math.floor(Math.random()*120+120);
     let b = Math.floor(Math.random()*120+120);
     return `rgb(${r},${g},${b})`;
+}
+//歌曲播放
+function playSong(url){
+    mp4.src = url;
+    mp4.oncanplay = function(){
+        mp4.play();
+    }
 }

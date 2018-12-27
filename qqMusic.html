@@ -12,12 +12,10 @@
 			padding: 0;
 			margin: 0;
 		}
-		html,body{
-			/* height: 200%; */
-		}
 	</style>
 </head>
 <body >
+	<audio src="" id="mp4">您的浏览器不支持audio标签!</audio>
 	<!-- 头部欢迎 -->
 	<div id="header">
 		<h2>欢迎来到XX音乐</h2>
@@ -40,19 +38,19 @@
 			<!-- 热门榜单 -->
 			<div class="hot">
 				<h3>
-					<a href="javascript:;" hidefocus="true" title="热门榜单">热门榜单</a>
+					<a href="javascript:;" hidefocus="true" title="热门榜单">热门榜单<span>△</span></a>
 				</h3>
-				<!-- 热门榜单列表 -->
-				<ul class="HotList"></ul>
 			</div>
+			<!-- 热门榜单列表 -->
+			<ul class="HotList"></ul>
 			<!-- 最新榜单 -->
 			<div class="newList">
 				<h3>
-					<a href="javascript:;" hidefocus="true" title="最新榜单">最新榜单</a>
+					<a href="javascript:;" hidefocus="true" title="最新榜单">最新榜单<span>△</span></a>
 				</h3>
-				<!-- 最新榜单列表 -->
-				<ul class="NewList"></ul>
 			</div>
+			<!-- 最新榜单列表 -->
+			<ul class="NewList"></ul>
 		</div>
 		<!-- 歌曲展示界面 -->
 		<div class="songList">
@@ -67,18 +65,71 @@
 	<script src="jquery-1.10.2.min.js"></script>
 	<script src="vue.min.js"></script>
 	<script src="newSong.js"></script>
-	<script src="playSong.js"></script>
+	<script src="createSongSheet.js"></script>
 	<script type="text/javascript">
 		window.onload = function(){
+			var ul = document.querySelectorAll("ul");
+			var HotList = ul[0];//热门榜单
+			var NewList = ul[1];//最新榜单
 			getNewSong();
+			let url = "https://api.bzqll.com/music/tencent/hotSongList?key=579621905&categoryId=10000000&limit=20&sortId=";
+			getSongDetail(url,3,function(data){
+				createSongSheet(data,HotList);
+			})
+			getSongDetail(url,2,function(data){
+				createSongSheet(data,NewList);
+			})
 		}
+		//是否随机播放
 		var ok = document.getElementById("ok");
 		ok.onclick = function(){
 			console.log(this.checked)
 		}
+		var mp4 = document.getElementById("mp4");
 		var btn = document.querySelector(".soso");
 		var input = btn.previousSibling.previousSibling;
-		// console.log(btn.previousSibling.previousSibling)
+		var isTrue = true;
+		var istrue = true;
+		function slide(Who,span){
+			if(isTrue){
+				$(Who).slideDown("slow");
+				console.log(span)
+				span.style.cssText = "display:inline-block;transform:rotate(180deg);transition:.5s";
+				isTrue = false;
+			}else{
+				$(Who).slideUp("slow");
+				console.log(span)
+				span.style.cssText = "display:inline-block;transform:rotate(360deg);transition:.5s";
+				isTrue = true;
+			}
+		}
+		{
+			let span = document.querySelector(".hot").children[0].children[0].children[0]
+			$(".hot").on("click",function(){
+				slide(".HotList",span)
+			}) 
+		}
+		{
+			let span1 = document.querySelector(".newList").children[0].children[0].children[0]
+			$(".newList").on("click",function(){
+				// console.log(span1)
+				slide(".NewList",span1)
+			}) 
+		}
+		var istrue = true;
+		$(".newList").on("click",function(){
+			let span = this.children[0].children[0].children[0];
+			if(isTrue){
+				$(".HotList").slideDown("slow");
+				span.style.cssText = "display:inline-block;transform:rotate(180deg)";
+				isTrue = false;
+			}else{
+				$(".HotList").slideUp("slow");
+				span.style.cssText = "display:inline-block;transform:rotate(360deg)";
+				isTrue = true;
+			}
+			
+		})
 		btn.onclick = function(){
 			if(input.value){
 				soso(input.value);
@@ -86,9 +137,7 @@
 				input.value = prompt("请输入搜索内容");
 			}
 		}
-		var ul = document.querySelectorAll("ul");
-		var HotList = ul[0];//热门榜单
-		var NewList = ul[1];//最新榜单
+		
 		var newSong = document.querySelector(".newSong");
 		newSong.onclick = function(){
 			head.children[0].innerHTML = this.children[0].children[0].innerHTML;
@@ -96,7 +145,7 @@
 			getNewSong();
 		}
 		// getSelection()
-		// 获得歌曲详情
+		// 获得歌曲详情(包括歌单)
 		function getSongDetail(url,params,callback1){
 			var xhr = function(){
 				if(window.XMLHttpRequest){
@@ -124,43 +173,7 @@
 			upDateTime.textContent = "";
 			tiTle.innerHTML = input.value;
 			data.data.forEach(function(song,index){
-				var a = document.createElement("a");
-					a.href = "javascript:;";
-					a.title = "点击播放"
-				var content = document.createElement("li");
-					content.style.backgroundColor = bgColor();
-					content.name = song.url;
-					a.textContent = index+1; 
-					// content.name = song.data.songmid;
-				var songname = document.createElement("h3");
-					songname.textContent =song.name;
-				var singername = document.createElement("span");
-					singername.textContent = song.singer;
-					a.appendChild(songname);
-					a.appendChild(singername);
-					content.appendChild(a);
-					display.appendChild(content);
-					content.addEventListener("click",function(){
-					{
-						let hasAudio = document.querySelectorAll("audio");
-						if(hasAudio){
-							hasAudio.forEach(function(x){
-								x.remove();
-							})
-						}
-					}
-					let audio = document.createElement("audio");
-						this.appendChild(audio);
-						audio.src =  this.name;
-						audio.oncanplay = function(){
-							console.log("b");
-							audio.play();
-							console.log(audio.duration,audio.currentTime)
-							// setTimeout(function(){
-
-							// },audio.duration)
-						}
-        		})
+				createSongList(song.id,song.name,song.singer,index);
 				});
 				
 		}
@@ -170,6 +183,28 @@
 			getSongDetail(url,key,function(data){
 				displaySosoSong(data);
 			})
+		}
+		//生成歌曲列表
+		function createSongList(contentName,songName,singerName,index){
+			let a = document.createElement("a");
+				a.href = "javascript:;";
+				a.title = "点击播放"
+			let content = document.createElement("li");
+				content.style.backgroundColor = bgColor();
+				content.name = contentName;
+				a.textContent = index+1; 
+			let songname = document.createElement("h3");
+				songname.textContent =songName;
+			let singername = document.createElement("span");
+				singername.textContent = singerName;
+				a.appendChild(songname);
+				a.appendChild(singername);
+				content.appendChild(a);
+				display.appendChild(content);
+				content.onclick = function(){
+					let url = `https://api.bzqll.com/music/tencent/url?key=579621905&id=${this.name}&br=192`;
+					playSong(url);
+				}
 		}
 	</script>
 </body>
