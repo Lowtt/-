@@ -88,48 +88,48 @@
 		var mp4 = document.getElementById("mp4");
 		var btn = document.querySelector(".soso");
 		var input = btn.previousSibling.previousSibling;
-		var isTrue = true;
+		var isTrue = 0;
 		var istrue = true;
-		function slide(Who,span){
-			if(isTrue){
-				$(Who).slideDown("slow");
-				console.log(span)
-				span.style.cssText = "display:inline-block;transform:rotate(180deg);transition:.5s";
-				isTrue = false;
+		function slideDown(Who,span){
+			$(Who).slideDown("slow");
+			span.style.cssText = "display:inline-block;transform:rotate(180deg);transition:.5s";
+		}
+		function sildeUp(Who,span){
+			$(Who).slideUp("slow");
+			span.style.cssText = "display:inline-block;transform:rotate(360deg);transition:.5s";
+		}
+		function slide(is,Who,span){
+			if(is===isTrue){
+				if(isTrue%2==0){
+					slideDown(Who,span);
+					isTrue++;
+				}else{
+					sildeUp(Who,span);
+					isTrue++;
+				}
 			}else{
-				$(Who).slideUp("slow");
-				console.log(span)
-				span.style.cssText = "display:inline-block;transform:rotate(360deg);transition:.5s";
-				isTrue = true;
+				if(istrue){
+					slideDown(Who,span);
+					istrue = false;
+				}else{
+					sildeUp(Who,span);
+					istrue = true;
+				}
 			}
+			
 		}
 		{
 			let span = document.querySelector(".hot").children[0].children[0].children[0]
 			$(".hot").on("click",function(){
-				slide(".HotList",span)
+				slide(isTrue,".HotList",span)
 			}) 
 		}
 		{
 			let span1 = document.querySelector(".newList").children[0].children[0].children[0]
 			$(".newList").on("click",function(){
-				// console.log(span1)
-				slide(".NewList",span1)
+				slide(istrue,".NewList",span1)
 			}) 
 		}
-		var istrue = true;
-		$(".newList").on("click",function(){
-			let span = this.children[0].children[0].children[0];
-			if(isTrue){
-				$(".HotList").slideDown("slow");
-				span.style.cssText = "display:inline-block;transform:rotate(180deg)";
-				isTrue = false;
-			}else{
-				$(".HotList").slideUp("slow");
-				span.style.cssText = "display:inline-block;transform:rotate(360deg)";
-				isTrue = true;
-			}
-			
-		})
 		btn.onclick = function(){
 			if(input.value){
 				soso(input.value);
