@@ -11,7 +11,6 @@ function getNewSong(){
         dataType:"jsonp",
         jsonp:'jsonpCallback',
         success:function(result){
-            console.log(result)
             displayNew(result)
         },
         error:function(){

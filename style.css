@@ -70,6 +70,7 @@ ul li{
 }
 .HotList li a:hover,.NewList li a:hover{
     background: lightblue;
+    /* transform:scale(1.5,1.5) */
 }
 .newSong a:hover,.hot a:hover,.newList a:hover{
     background: lightslategray;

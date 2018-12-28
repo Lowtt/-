@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>lrctest</title>
+        <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+        <!-- <script src="js/lrctest.js" type="text/javascript"></script> -->
+    </head>
+    <body>
+            <audio src="https://api.bzqll.com/music/tencent/url?key=579621905&id=004YVmzL0O67WR&br=192" controls="controls" autoplay="autoplay">
+                抱歉你的浏览器版本out了，去升级吧
+            </audio>
+        <div id="lyric"></div>
+    </body>
+    <script>
+            $(document).ready(function () {
+    var lrc = ["[00:00.805]陈一发儿 - 童话镇","[00:23.076]听说白雪公主在逃跑"]; //创建歌词数组;
+    // lrc.push("[00:00.805]陈一发儿 - 童话镇");
+    lrc.push("[00:10.000]作曲 : 暗杠 作词 : 竹君");
+    lrc.push("[00:15.000]编曲 : 暗杠");
+    // lrc.push("[00:23.076]听说白雪公主在逃跑");
+    lrc.push("[00:26.466]小红帽在担心大灰狼");
+    //...中间省略N行...
+    lrc.push("[03:22.746]又陌生");
+    lrc.push("[03:24.488]啊~~啊~~啊~");
+    lrc.push("[10:00.000]完～");
+
+    var myAudio = $("audio")[0];
+    var lrcArr = [];
+    getLrc();
+
+    function getLrc() {
+        var timeReg = /\[\d{2}:\d{2}\.\d{3}\]/g;//匹配时间的正则表达式
+        var result = [];
+        for (var i=0;i<lrc.length;i++) {
+            var time = lrc[i].match(timeReg); //获取歌词里的时间
+            var value = lrc[i].replace(timeReg, ""); //获取纯歌词文本
+            for (var j=0;j<time.length;j++ ) {
+                var t = time[j].slice(1, -1).split(":"); //t[0]分钟，t[1]秒
+                var timeArr = parseInt(t[0], 10) * 60 + parseFloat(t[1]);
+                result.push([timeArr, value]);//以[时间(秒)，歌词]的形式存进result
+            }
+        }
+        lrcArr = result;//这个有点多余。。。
+        setInterval(showLrc, 200);//设置定时，每200毫秒更新一下
+    }
+    function showLrc() {
+        var curTime = myAudio.currentTime;//获取当前的播放时间
+        for (var i = 0; i < lrcArr.length; i++) {
+            if ((curTime >lrcArr[i][0])&&(curTime<lrcArr[i+1][0])) {
+                 //播放时间大于对应歌词时间小于下一句歌词时间就显示当前歌词
+                document.getElementById("lyric").innerHTML = lrcArr[i][1];
+                break;//找到对应歌词就停，不停的话，呵呵。。。
+            }
+        }
+    }
+})
+    </script>
+</html>

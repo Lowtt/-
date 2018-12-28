@@ -15,7 +15,7 @@
 	</style>
 </head>
 <body >
-	<audio src="" id="mp4">您的浏览器不支持audio标签!</audio>
+	<audio src="" id="mp4">连audio标签都不支持的浏览器或版本，还不卸载或更新，等着过年呢？</audio>
 	<!-- 头部欢迎 -->
 	<div id="header">
 		<h2>欢迎来到XX音乐</h2>
@@ -32,7 +32,7 @@
 		<div class="sider">
 			<div class="newSong">
 					<h3>
-						<a href="javascript:;" hidefocus="true" title="新歌首发">新歌首发</a>
+						<a href="javascript:;" hidefocus="true" title="新歌首发">巅峰榜·新歌</a>
 					</h3>
 			</div>
 			<!-- 热门榜单 -->
@@ -63,7 +63,6 @@
 		</div>
 	</div>
 	<script src="jquery-1.10.2.min.js"></script>
-	<script src="vue.min.js"></script>
 	<script src="newSong.js"></script>
 	<script src="createSongSheet.js"></script>
 	<script type="text/javascript">
@@ -73,10 +72,10 @@
 			var NewList = ul[1];//最新榜单
 			getNewSong();
 			let url = "https://api.bzqll.com/music/tencent/hotSongList?key=579621905&categoryId=10000000&limit=20&sortId=";
-			getSongDetail(url,3,function(data){
+			getSongDetail("json",url,3,function(data){
 				createSongSheet(data,HotList);
 			})
-			getSongDetail(url,2,function(data){
+			getSongDetail("json",url,2,function(data){
 				createSongSheet(data,NewList);
 			})
 		}
@@ -119,45 +118,46 @@
 			
 		}
 		{
-			let span = document.querySelector(".hot").children[0].children[0].children[0]
+			let span = document.querySelector(".hot").children[0].children[0].children[0];
 			$(".hot").on("click",function(){
-				slide(isTrue,".HotList",span)
+				slide(isTrue,".HotList",span);
 			}) 
 		}
 		{
-			let span1 = document.querySelector(".newList").children[0].children[0].children[0]
+			let span1 = document.querySelector(".newList").children[0].children[0].children[0];
 			$(".newList").on("click",function(){
-				slide(istrue,".NewList",span1)
+				slide(istrue,".NewList",span1);
 			}) 
 		}
+		//搜索歌曲
 		btn.onclick = function(){
 			if(input.value){
 				soso(input.value);
 			}else{
 				input.value = prompt("请输入搜索内容");
+				soso(input.value)
 			}
 		}
-		
+		//新歌首发展示列表以及对应点击事件(新歌和其它榜单调用的接口不同)
 		var newSong = document.querySelector(".newSong");
 		newSong.onclick = function(){
 			head.children[0].innerHTML = this.children[0].children[0].innerHTML;
 			display.textContent = "";
 			getNewSong();
 		}
-		// getSelection()
 		// 获得歌曲详情(包括歌单)
-		function getSongDetail(url,params,callback1){
-			var xhr = function(){
+		function getSongDetail(json,url,params,callback1){
+			let xhr = function(){
 				if(window.XMLHttpRequest){
 					return new XMLHttpRequest();
 				}else{
 					return new ActiveObject("Micrsoft.XMLHttp");
 				}
 			}();
-				xhr.responseType = "json";		
+				xhr.responseType = json;		
 				xhr.onreadystatechange = function(){
 					if(xhr.readyState===4&&xhr.status=="200"){
-						console.log(xhr.response)
+						// console.log(xhr.response)
 						callback1(xhr.response);
 					}
 				}
@@ -174,13 +174,12 @@
 			tiTle.innerHTML = input.value;
 			data.data.forEach(function(song,index){
 				createSongList(song.id,song.name,song.singer,index);
-				});
-				
+				});	
 		}
 		//搜索歌曲
 		function soso(key){
 			let url = "https://api.bzqll.com/music/tencent/search?key=579621905&limit=100&offset=0&type=song&s=";
-			getSongDetail(url,key,function(data){
+			getSongDetail("json",url,key,function(data){
 				displaySosoSong(data);
 			})
 		}
@@ -188,7 +187,7 @@
 		function createSongList(contentName,songName,singerName,index){
 			let a = document.createElement("a");
 				a.href = "javascript:;";
-				a.title = "点击播放"
+				a.title = "点击播放";
 			let content = document.createElement("li");
 				content.style.backgroundColor = bgColor();
 				content.name = contentName;
@@ -203,7 +202,22 @@
 				display.appendChild(content);
 				content.onclick = function(){
 					let url = `https://api.bzqll.com/music/tencent/url?key=579621905&id=${this.name}&br=192`;
+					//播放歌曲
 					playSong(url);
+					// console.log(this.name);
+					let Url = "https://api.bzqll.com/music/tencent/lrc?key=579621905&id=";
+					getSongDetail("",Url,this.name,function(data){
+						console.log(data,data.indexOf("]"))
+						let arr =[];
+						let m = 0;
+						// while(m>-1){
+							n = data.substring(0+m,data.indexOf("]",m+1))
+							m = data.indexOf("]",m);
+							console.log(n)
+						}
+					})
+					// display.style.transition = "1.9s";
+					// display.style.opacity = ".2";
 				}
 		}
 	</script>
