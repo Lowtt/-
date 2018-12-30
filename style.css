@@ -75,7 +75,7 @@ ul li{
 .newSong a:hover,.hot a:hover,.newList a:hover{
     background: lightslategray;
     color: lightsalmon;
-    font-size: 25px;
+    font-size: 20px;
     transition: .5s;
 }
 .songList{

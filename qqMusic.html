@@ -18,6 +18,7 @@
 	<audio src="" id="mp4">连audio标签都不支持的浏览器或版本，还不卸载或更新，等着过年呢？</audio>
 	<!-- 头部欢迎 -->
 	<div id="header">
+		<div id="show"></div>
 		<h2>欢迎来到XX音乐</h2>
 		<!-- 音乐搜索 -->
 		<div class="search">
@@ -79,11 +80,18 @@
 				createSongSheet(data,NewList);
 			})
 		}
+		// console.log($("#show")[0])
 		//是否随机播放
 		var ok = document.getElementById("ok");
 		ok.onclick = function(){
 			console.log(this.checked)
 		}
+		//存储[xx:xx]xx格式歌词
+		var arr = [];
+		//存储秒数+歌词
+		let lrcArr =[];
+		//声明是否显示歌词
+		var arrHas;
 		var mp4 = document.getElementById("mp4");
 		var btn = document.querySelector(".soso");
 		var input = btn.previousSibling.previousSibling;
@@ -207,19 +215,61 @@
 					// console.log(this.name);
 					let Url = "https://api.bzqll.com/music/tencent/lrc?key=579621905&id=";
 					getSongDetail("",Url,this.name,function(data){
-						console.log(data,data.indexOf("]"))
-						let arr =[];
+						// console.log(data,data.indexOf("]"))
+						arr.length = 0;
+						lrcArr.length = 0;
 						let m = 0;
-						// while(m>-1){
-							n = data.substring(0+m,data.indexOf("]",m+1))
-							m = data.indexOf("]",m);
-							console.log(n)
+						for(let i=0;i<data.length;i++){
+							if(data[i]=="["){
+								let re = data.substring(m,i);
+								arr.push(re);
+								m = i;
+							}
+						}
+						arr.shift();
+						let moveExcess = /(ti)+|(ar:)+|(al)+|(by:)+|(offset)+/i;
+						for(let i=0;i<arr.length;i++){
+							if(moveExcess.test(arr[i])){
+								arr.splice(i,1);
+								i--;
+							}
+						}
+						if(arrHas){
+							$("#show")[0].innerHTML = "";
+							clearInterval(arrHas);
+							getLrc(arr);
+						}else{
+							getLrc(arr);
 						}
 					})
-					// display.style.transition = "1.9s";
-					// display.style.opacity = ".2";
 				}
 		}
+		//获得歌词时间对应内容
+		function getLrc(arr){
+			var timeReg = /\[\d{2}:\d{2}\.\d{2,}\]/g;
+			for (let i=0;i<arr.length;i++){
+				var time = arr[i].match(timeReg);
+				// console.log(arr,arr[i],time)
+				var value = arr[i].replace(timeReg,""); //获取纯歌词文本
+				for (let j=0;j<time.length;j++ ) {
+					var t = time[j].slice(1, -1).split(":");
+					var timeArr = parseInt(t[0], 10) * 60 + parseFloat(t[1]);
+					lrcArr.push([timeArr, value]);
+				}
+			}
+			arrHas = setInterval(showLrc, 20);
+		}
+		//展示歌词
+		function showLrc(){
+			var curTime = mp4.currentTime;//获取当前的播放时间
+			for (let i = 0; i < lrcArr.length; i++) {
+				if ((curTime >lrcArr[i][0])&&(curTime<lrcArr[i+1][0])) {
+					//播放时间大于对应歌词时间小于下一句歌词时间就显示当前歌词
+					document.getElementById("show").innerHTML = lrcArr[i][1];
+					break;
+				}
+			}
+    	}
 	</script>
 </body>
 </html>
