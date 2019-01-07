@@ -78,13 +78,22 @@ ul li{
     font-size: 20px;
     transition: .5s;
 }
-.songList{
+.songList,#play{
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
-    float: right;
-    width: 80%;
+    /* float: right; */
+    position: absolute;
+    top: 200px;
+    left: 400px;
+    width: 60%;
     border: 1px solid blue;
+}
+#play{
+    display: none;
+    top: 150px;
+    left: 350px;
+    height: 550px;
 }
 .songList .head{
     text-indent: 32px;
@@ -100,7 +109,7 @@ ul li{
     color: rgb(131, 143, 150);
 }
 .songList .head span[class="random"]{
-    margin-left: 45%;
+    margin-left: 25%;
     font-size: 16px;
 }
 .songList .display li{
@@ -134,5 +143,30 @@ ul li{
     margin-left: 200px;
     color: black;
 }
+@keyframes rotate{
+    from{
+        transform: rotate(0)
+    }
+    to{
+        transform: rotate(360deg)
+    }
+}
+#play .songPic{
+    margin: 20px;
+    width: 230px;
+    height: 230px;
+    border-radius: 50%;
+    animation: rotate 10s infinite linear .5s;
+    display: inline-block;
+}
+#play .playName{
+    display: inline-block;
+    width: 70px;
+    height: 16px;
+    margin-top: 10px;
+    color: red;
+}
+
+
 
  

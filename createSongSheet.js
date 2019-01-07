@@ -15,8 +15,10 @@ function createSongSheet(data,who){
             content.appendChild(a);
             who.appendChild(content);
             a.addEventListener("click",function(){
-                let url = ` https://api.bzqll.com/music/tencent/songList?key=579621905&id=`;
+                let url = `https://api.bzqll.com/music/tencent/songList?key=579621905&id=`;
                 let _thisA = this;
+                songList.style.display = "block";
+                $("#play").css("display","none");
                 //获得歌单歌曲
                 getSongDetail("json",url,this.name,function(data){
                     for(let i=0;i<display.children.length;i++){

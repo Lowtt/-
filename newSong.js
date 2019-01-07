@@ -11,7 +11,7 @@ function getNewSong(){
         dataType:"jsonp",
         jsonp:'jsonpCallback',
         success:function(result){
-            displayNew(result)
+			displayNew(result);
         },
         error:function(){
             console.log('error');
@@ -33,9 +33,42 @@ function bgColor(){
     return `rgb(${r},${g},${b})`;
 }
 //歌曲播放
-function playSong(url){
+function playSong(url,idName,nameName){
     mp4.src = url;
     mp4.oncanplay = function(){
-        mp4.play();
+		songList.style.display = "none";
+		$("#play").css("display","block");
+		mp4.play();
+		playLrc(idName,nameName);
+        let Url = "https://api.bzqll.com/music/tencent/lrc?key=579621905&id=";
+		getSongDetail("",Url,idName,function(data){
+			// console.log(data)
+			arr.length = 0;
+			lrcArr.length = 0;
+			let m = 0;
+			for(let i=0;i<data.length;i++){
+				if(data[i]=="["){
+					let re = data.substring(m,i);
+					arr.push(re);
+					m = i;
+				}
+			}
+			arr.push(data.substring(m,data.length));
+			arr.shift();
+			let moveExcess = /(ti)+|(ar:)+|(al)+|(by:)+|(offset)+/i;
+			for(let i=0;i<arr.length;i++){
+				if(moveExcess.test(arr[i])){
+					arr.splice(i,1);
+					i--;
+				}
+			}
+			if(arrHas){
+				$("#show")[0].innerHTML = "";
+				clearInterval(arrHas);
+				getLrc(arr);
+			}else{
+				getLrc(arr);
+			}
+		})
     }
 }
