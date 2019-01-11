@@ -28,7 +28,6 @@
 			</p>
 		</div>
 	</div>
-	<div id="main">
 		<!-- 侧边栏 -->
 		<div class="sider">
 			<div class="newSong">
@@ -55,22 +54,73 @@
 		</div>
 		<!-- 播放歌词界面 -->
 		<div id="play">
+			<!-- 返回歌曲列表 -->
+			<a class="back" href="javascript:;" onclick="goBack()" title="返回歌曲列表"><img src="back.png" width="40px" height="40px"></a>
+			<!-- 歌曲大图片 -->
 			<div class="songPic"></div>
-			<h4 class="playName"></h4>
+			<!-- 歌名 -->
+			<h2 class="playSongName"></h2>
+			<!-- 歌手名 -->
+			<h4 class="singer"></h4>
+			<!-- 专辑名 -->
+			<h4 class="album"></h4>
+			<!-- 歌词 -->
+			<div class="lrc"></div>
+			<!-- 底部控制部分 -->
+			<div class="end">
+				<div class="controls">
+					<!-- 上一曲 -->
+					<div class="pre">
+						<a href="javascript:;" title="上一曲"" onclick="songChange()"><img src="pre.png" width="30px" height="30px"></a>
+					</div>
+					<!-- 播放/暂停 -->
+					<div class="playStop">
+						<a href="javascript:;" title="暂停""><img class="plSt" src="stop.png" width="30px" height="30px"></a>
+					</div>
+					<!-- 下一曲 -->
+					<div class="next">
+						<a href="javascript:;" title="下一曲"" onclick="songChange()"><img src="next.png" width="30px" height="30px"></a>
+					</div>
+				</div>
+				<!-- 专辑图片 -->
+				<img src="" alt="" class="albumImg">
+				<!-- 进度条 -->
+				<div class="progress">
+					<!-- 歌名 -->
+					<span class="sName"></span>
+					<!-- 歌曲时间 -->
+					<span class="scurrent"></span>
+					<!-- 进度条 -->
+					<div class="Bar"><div class="bar"></div></div>
+				</div>
+			</div>
 		</div>
 		<!-- 歌曲展示界面 -->
 		<div class="songList">
 			<p class="head">
 				<span>新歌首发</span>
 				<span class="upDateTime"></span>
-				<span class="random"><input type="checkbox" id="ok">随机播放</span>
+				<a href="javascript:void(0)" class="goto" title="进入播放界面" onclick="goTo()"><img src="to.png" width="40px" height="40px"></a>
 			</p>
 			<ul class="display"></ul>
 		</div>
-	</div>
 	<script src="jquery-1.10.2.min.js"></script>
+	<!-- 新歌 -->
 	<script src="newSong.js"></script>
+	<!-- 创建歌单 -->
 	<script src="createSongSheet.js"></script>
+	<!-- 切歌 -->
+	<script src="changeSong.js"></script>
+	<!-- 创建歌曲列表 -->
+	<script src="createSongList.js"></script>
+	<!-- 歌词 -->
+	<script src="lrc.js"></script>
+	<!-- 搜索歌曲 -->
+	<script src="searchSong.js"></script>
+	<!-- 歌曲播放 -->
+	<script src="songPlay.js"></script>
+	<!-- 歌单滑动效果 -->
+	<script src="songSheetSlide.js"></script>
 	<script type="text/javascript">
 		window.onload = function(){
 			var ul = document.querySelectorAll("ul");
@@ -85,25 +135,6 @@
 				createSongSheet(data,NewList);
 			})
 		}
-		// console.log($("#show")[0])
-		//是否随机播放
-		var ok = document.getElementById("ok");
-		ok.onclick = function(){
-			if(this.checked){
-				let random = Math.floor(Math.random()*songList.children[1].children.length);
-				let number = songList.children[1].children[random].name;
-				let url = `https://api.bzqll.com/music/tencent/url?key=579621905&id=${number}&br=192`;
-				playSong(url,number);
-				// console.log(mp4.duration)
-				// setInterval(ran,mp4.duration)
-			}
-		}
-		function ran(){
-			let random = Math.floor(Math.random()*songList.children[1].children.length);
-			let number = songList.children[1].children[random].name;
-			let url = `https://api.bzqll.com/music/tencent/url?key=579621905&id=${number}&br=192`;
-			playSong(url,number);
-		}
 		//存储[xx:xx]xx格式歌词
 		var arr = [];
 		//存储秒数+歌词
@@ -111,62 +142,6 @@
 		//声明是否显示歌词
 		var arrHas;
 		var mp4 = document.getElementById("mp4");
-		var btn = document.querySelector(".soso");
-		var input = btn.previousSibling.previousSibling;
-		var isTrue = 0;
-		var istrue = true;
-		//滑动显示
-		function slideDown(Who,span){
-			$(Who).slideDown("slow");
-			span.style.cssText = "display:inline-block;transform:rotate(180deg);transition:.5s";
-		}
-		//滑动隐藏
-		function sildeUp(Who,span){
-			$(Who).slideUp("slow");
-			span.style.cssText = "display:inline-block;transform:rotate(360deg);transition:.5s";
-		}
-		//歌单列表滑动
-		function slide(is,Who,span){
-			if(is===isTrue){
-				if(isTrue%2==0){
-					slideDown(Who,span);
-					isTrue++;
-				}else{
-					sildeUp(Who,span);
-					isTrue++;
-				}
-			}else{
-				if(istrue){
-					slideDown(Who,span);
-					istrue = false;
-				}else{
-					sildeUp(Who,span);
-					istrue = true;
-				}
-			}
-			
-		}
-		{
-			let span = document.querySelector(".hot").children[0].children[0].children[0];
-			$(".hot").on("click",function(){
-				slide(isTrue,".HotList",span);
-			}) 
-		}
-		{
-			let span1 = document.querySelector(".newList").children[0].children[0].children[0];
-			$(".newList").on("click",function(){
-				slide(istrue,".NewList",span1);
-			}) 
-		}
-		//搜索歌曲
-		btn.onclick = function(){
-			if(input.value){
-				soso(input.value);
-			}else{
-				input.value = prompt("请输入搜索内容");
-				soso(input.value)
-			}
-		}
 		//新歌首发展示列表以及对应点击事件(新歌和其它榜单调用的接口不同)
 		var newSong = document.querySelector(".newSong");
 		newSong.onclick = function(){
@@ -195,97 +170,15 @@
 				xhr.open("GET",url+params);
 				xhr.send();
 		}
-		//展示搜索歌曲
-		function displaySosoSong(data){
-			for(let i=0;i<display.children.length;i++){
-				display.children[i].remove();
-				i--;
-			}
-			upDateTime.textContent = "";
-			tiTle.innerHTML = input.value;
-			data.data.forEach(function(song,index){
-				createSongList(song.id,song.name,song.singer,index);
-			});	
+		//返回歌曲列表
+		function goBack(){
 			songList.style.display = "block";
 			$("#play").css("display","none");
 		}
-		//搜索歌曲
-		function soso(key){
-			let url = "https://api.bzqll.com/music/tencent/search?key=579621905&limit=100&offset=0&type=song&s=";
-			getSongDetail("json",url,key,function(data){
-				displaySosoSong(data);
-			})
-		}
-		//生成歌曲列表
-		function createSongList(contentId,songName,singerName,index){
-			let a = document.createElement("a");
-				a.href = "javascript:;";
-				a.title = "点击播放";
-			let content = document.createElement("li");
-				content.style.backgroundColor = bgColor();
-				content.id = contentId;
-				content.name = songName;
-				a.textContent = index+1; 
-			let songname = document.createElement("h3");
-				songname.textContent =songName;
-			let singername = document.createElement("span");
-				singername.textContent = singerName;
-				a.appendChild(songname);
-				a.appendChild(singername);
-				content.appendChild(a);
-				display.appendChild(content);
-				content.onclick = function(){
-					let url = `https://api.bzqll.com/music/tencent/url?key=579621905&id=${this.id}&br=192`;
-					//播放歌曲
-					playSong(url,this.id,this.name);
-				}
-		}
-		//获得歌词时间对应内容
-		function getLrc(arr){
-			//正则匹配歌词对应时间
-			let timeReg = /\[\d{2}:\d{2}\.\d{2,}\]/g;
-			for (let i=0;i<arr.length;i++){
-				//获取歌词对应的时间
-				let time = arr[i].match(timeReg);
-				// console.log(arr,arr[i],time)
-				//获取纯歌词文本
-				let value = arr[i].replace(timeReg,"");
-				//清除歌词为“空格”的
-				if(value.length==1){
-					continue;
-				}
-				for(let j=0;j<time.length;j++){
-					// console.log(time)
-					let t = time[j].slice(1,-1).split(":");
-					// console.log(t)
-					//将歌词对应时间转换成纯秒数
-					let timeArr = parseInt(t[0])*60 + parseFloat(t[1]);
-					lrcArr.push([timeArr,value]);
-				}
-			}
-			arrHas = setInterval(showLrc,20);
-		}
-		//展示歌词
-		function showLrc(){
-			//获取当前的播放时间
-			let curTime = mp4.currentTime;
-			for (let i=0;i<lrcArr.length;i++){
-				//当为最后一句歌词时直接显示
-				if(i==lrcArr.length-1){
-					document.getElementById("show").innerHTML = lrcArr[i][1];
-				}else if((curTime>lrcArr[i][0])&&(curTime<lrcArr[i+1][0])){
-					//播放时间大于对应歌词时间小于下一句歌词时间就显示当前歌词
-					document.getElementById("show").innerHTML = lrcArr[i][1];
-					break;
-				}
-			}
-		}
-		//播放界面
-		function playLrc(songId,songName){
-			let songPic = document.querySelector(".songPic");
-			songPic.style.background = `url('https://api.bzqll.com/music/tencent/pic?key=579621905&id=${songId}')`;
-			let name = songPic.nextSibling.nextSibling;
-			name.innerHTML = songName;
+		//进入播放界面
+		function goTo(){
+			songList.style.display = "none";
+			$("#play").css("display","block");
 		}
 	</script>
 </body>
