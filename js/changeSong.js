@@ -11,14 +11,14 @@ function songChange(){
 //播放/暂停
 $(".plSt")[0].onclick = function(){
     console.log()
-    let srcTest = /(http:\/\/127.0.0.1:8080\/)*stop.png/i;
+    let srcTest = /(http:\/\/127.0.0.1:8080\/)*img\/stop.png/i;
     if(srcTest.test(this.src)){
         mp4.pause();
-        this.src = "play.png";
+        this.src = "img/play.png";
         this.parentNode.title = "播放";
     }else{
         mp4.play();
-        this.src = "stop.png";
+        this.src = "img/stop.png";
         this.parentNode.title = "暂停";
     }
 }

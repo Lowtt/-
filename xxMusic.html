@@ -4,8 +4,8 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">
-	<link rel="icon" href="title.ico" type="img/x-ico" />
-	<link rel="stylesheet" href="style.css">
+	<link rel="icon" href="img/title.ico" type="img/x-ico" />
+	<link rel="stylesheet" href="css/style.css">
 	<title>xxMusic</title>
 	<style>
 		*{
@@ -55,7 +55,7 @@
 		<!-- 播放歌词界面 -->
 		<div id="play">
 			<!-- 返回歌曲列表 -->
-			<a class="back" href="javascript:;" onclick="goBack()" title="返回歌曲列表"><img src="back.png" width="40px" height="40px"></a>
+			<a class="back" href="javascript:;" onclick="goBack()" title="返回歌曲列表"><img src="img/back.png" width="40px" height="40px"></a>
 			<!-- 歌曲大图片 -->
 			<div class="songPic"></div>
 			<!-- 歌名 -->
@@ -71,15 +71,15 @@
 				<div class="controls">
 					<!-- 上一曲 -->
 					<div class="pre">
-						<a href="javascript:;" title="上一曲"" onclick="songChange()"><img src="pre.png" width="30px" height="30px"></a>
+						<a href="javascript:;" title="上一曲"" onclick="songChange()"><img src="img/pre.png" width="30px" height="30px"></a>
 					</div>
 					<!-- 播放/暂停 -->
 					<div class="playStop">
-						<a href="javascript:;" title="暂停""><img class="plSt" src="stop.png" width="30px" height="30px"></a>
+						<a href="javascript:;" title="暂停""><img class="plSt" src="img/stop.png" width="30px" height="30px"></a>
 					</div>
 					<!-- 下一曲 -->
 					<div class="next">
-						<a href="javascript:;" title="下一曲"" onclick="songChange()"><img src="next.png" width="30px" height="30px"></a>
+						<a href="javascript:;" title="下一曲"" onclick="songChange()"><img src="img/next.png" width="30px" height="30px"></a>
 					</div>
 				</div>
 				<!-- 专辑图片 -->
@@ -100,32 +100,34 @@
 			<p class="head">
 				<span>新歌首发</span>
 				<span class="upDateTime"></span>
-				<a href="javascript:void(0)" class="goto" title="进入播放界面" onclick="goTo()"><img src="to.png" width="40px" height="40px"></a>
+				<a href="javascript:void(0)" class="goto" title="进入播放界面" onclick="goTo()"><img src="img/to.png" width="40px" height="40px"></a>
 			</p>
 			<ul class="display"></ul>
 		</div>
-	<script src="jquery-1.10.2.min.js"></script>
+	<script src="js/jquery-1.10.2.min.js"></script>
 	<!-- 新歌 -->
-	<script src="newSong.js"></script>
+	<script src="js/newSong.js"></script>
 	<!-- 创建歌单 -->
-	<script src="createSongSheet.js"></script>
+	<script src="js/createSongSheet.js"></script>
 	<!-- 切歌 -->
-	<script src="changeSong.js"></script>
+	<script src="js/changeSong.js"></script>
 	<!-- 创建歌曲列表 -->
-	<script src="createSongList.js"></script>
+	<script src="js/createSongList.js"></script>
 	<!-- 歌词 -->
-	<script src="lrc.js"></script>
+	<script src="js/lrc.js"></script>
 	<!-- 搜索歌曲 -->
-	<script src="searchSong.js"></script>
+	<script src="js/searchSong.js"></script>
 	<!-- 歌曲播放 -->
-	<script src="songPlay.js"></script>
+	<script src="js/songPlay.js"></script>
 	<!-- 歌单滑动效果 -->
-	<script src="songSheetSlide.js"></script>
+	<script src="js/songSheetSlide.js"></script>
 	<script type="text/javascript">
 		window.onload = function(){
 			var ul = document.querySelectorAll("ul");
-			var HotList = ul[0];//热门榜单
-			var NewList = ul[1];//最新榜单
+			//热门榜单
+			var HotList = ul[0];
+			//最新榜单
+			var NewList = ul[1];
 			getNewSong();
 			let url = "https://api.bzqll.com/music/tencent/hotSongList?key=579621905&categoryId=10000000&limit=20&sortId=";
 			getSongDetail("json",url,3,function(data){

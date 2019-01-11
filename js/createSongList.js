@@ -33,7 +33,6 @@ function createSongList(contentId,songName,singerName,index){
                 playSong(url,this.id,this.name);
                 $(".singer")[0].innerHTML = "歌手名:"+this.children[0].children[1].innerHTML;
                 this.value++;
-            }
-            
+            } 
         }
 }

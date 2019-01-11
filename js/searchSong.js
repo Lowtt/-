@@ -6,8 +6,9 @@ btn.onclick = function(){
         soso(input.value);
     }else{
         input.value = prompt("请输入搜索内容");
-        soso(input.value)
+        soso(input.value);
     }
+    $(".goto").css("display","none");
 }
 //搜索歌曲
 function soso(key){
